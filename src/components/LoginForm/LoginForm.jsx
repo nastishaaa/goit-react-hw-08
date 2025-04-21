@@ -4,6 +4,7 @@ import c from './LoginForm.module.css'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useId } from 'react';
+import toast from 'react-hot-toast';
 
 const FeedbackSchema = Yup.object().shape({
     name: Yup.string().min(3, 'Too short').max(25, 'Too long').required('Required'),
@@ -23,12 +24,20 @@ export default function RegisterForm () {
     const passwordField = useId();
     const dispatch = useDispatch();
 
-    const handleSubmit = (values, actions) => {
-        console.log("Register values:", values);
-    dispatch(
-        logIn({...values})
-    );
-    actions.resetForm();
+    const handleSubmit = async (values, actions) => {
+        try {
+            const resultAction = await dispatch(logIn(values));
+    
+            if (logIn.fulfilled.match(resultAction)) {
+                toast.success('Successful login!')
+                actions.resetForm();
+            } else {
+                toast.error("Something went wrong!");
+
+            }
+        } catch (error) {
+            toast.error("Something went wrong!");
+        }
   };
 
   return (

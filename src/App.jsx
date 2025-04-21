@@ -9,6 +9,7 @@ import AppBar from './components/AppBar/AppBar';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { PrivateRoute } from './components/PrivateRoute';
 import { selectIsLoggedIn } from './redux/auth/selectors';
+import { Toaster } from 'react-hot-toast';
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const ContactsPage = lazy(() => import('./pages/ContactsPage/ContactsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
@@ -20,8 +21,6 @@ export default function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const isRefreshing = useSelector(selectIsRefreshing);
 
-  console.log(isRefreshing);
-  console.log(isLoggedIn)
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
@@ -30,6 +29,7 @@ export default function App() {
     <strong>Refreshing user...</strong>
   ) : (
     <div>
+      <Toaster position="top-right" reverseOrder={false} />
       <AppBar />
       <Suspense fallback={null}>
         <Routes>
