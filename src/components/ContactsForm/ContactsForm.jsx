@@ -7,12 +7,12 @@ import * as Yup from "yup";
 
 const initialValues = {
     name: "",
-    phone: "",
+    number: "",
 };
 
 const FeedbackSchema = Yup.object().shape({
     name: Yup.string().matches(/^[a-zA-Zа-яА-ЯёЁіІїЇєЄ' -]+$/, "Invalid name format").min(3, "Too short").max(50, "Too long").required("Required"),
-    phone: Yup.string().matches(/^\+?[0-9\s\-()]{7,20}$/, "Invalid phone number").required("Required").min(7).max(7, "Too long"),
+    number: Yup.string().matches(/^\+?[0-9\s\-()]{7,20}$/, "Invalid phone number").required("Required").min(7).max(7, "Too long"),
 });
 
 
@@ -47,10 +47,10 @@ export default function ContactForm(){
                     <label htmlFor={phoneField}>Phone</label>
                     <Field className={c.input} 
                     type="tel" 
-                    name="phone" 
+                    name="number" 
                     id={phoneField}
                     autoComplete="off"/>
-                    <ErrorMessage name="phone" component="span" />
+                    <ErrorMessage name="number" component="span" />
                 </div>
                 <button type="submit">Add contact</button>
             </Form>

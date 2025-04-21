@@ -8,16 +8,20 @@ import { Suspense } from 'react';
 import AppBar from './components/AppBar/AppBar';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { PrivateRoute } from './components/PrivateRoute';
-
+import { selectIsLoggedIn } from './redux/auth/selectors';
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const ContactsPage = lazy(() => import('./pages/ContactsPage/ContactsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
 const RegistrationPage = lazy(() => import('./pages/RegistrationPage/RegistrationPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage/NotFoundPage'))
 
 export default function App() {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const isRefreshing = useSelector(selectIsRefreshing);
 
+  console.log(isRefreshing);
+  console.log(isLoggedIn)
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
@@ -53,6 +57,7 @@ export default function App() {
               component={<ContactsPage />} />
             }
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </div>
