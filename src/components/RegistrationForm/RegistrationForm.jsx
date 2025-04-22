@@ -3,12 +3,13 @@ import { register } from '../../redux/auth/operations';
 import c from './RegistrationForm.module.css'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import toast from 'react-hot-toast';
 import { useId } from 'react';
 
 const FeedbackSchema = Yup.object().shape({
     name: Yup.string().min(3, 'Too short').max(25, 'Too long').required('Required'),
     email: Yup.string().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Invalid email').required('Requaried'),
-    password: Yup.string().matches(/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g, 'Invalid password').min(6, 'Too short').max(15, 'Too long').required('Requaried'),
+    password: Yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/, 'Invalid password').min(6, 'Too short').max(15, 'Too long').required('Requaried'),
 });
 
 const initialValues = {
@@ -23,12 +24,20 @@ export default function RegisterForm () {
     const passwordField = useId();
     const dispatch = useDispatch();
 
-    const handleSubmit = (values, actions) => {
-        console.log("Register values:", values);
-    dispatch(
-        register({...values})
-    );
-    actions.resetForm();
+    const handleSubmit = async (values, actions) => {
+        try {
+            const resultAction = await dispatch(register(values));
+    
+            if (logIn.fulfilled.match(resultAction)) {
+                toast.success('Successful registration!')
+                actions.resetForm();
+            } else {
+                toast.error("Someone already has this name or email");
+
+            }
+        } catch (error) {
+            toast.error("Something went wrong!");
+        }
   };
 
   return (

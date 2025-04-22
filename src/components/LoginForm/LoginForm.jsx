@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 const FeedbackSchema = Yup.object().shape({
     name: Yup.string().min(3, 'Too short').max(25, 'Too long').required('Required'),
     email: Yup.string().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Invalid email').required('Requaried'),
-    password: Yup.string().matches(/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g, 'Invalid password').min(6, 'Too short').max(15, 'Too long').required('Requaried'),
+    password: Yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/, 'Invalid password').min(6, 'Too short').max(15, 'Too long').required('Requaried'),
 });
 
 const initialValues = {
@@ -32,7 +32,7 @@ export default function RegisterForm () {
                 toast.success('Successful login!')
                 actions.resetForm();
             } else {
-                toast.error("Something went wrong!");
+                toast.error("Please register first!");
 
             }
         } catch (error) {
