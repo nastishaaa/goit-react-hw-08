@@ -4,6 +4,7 @@ import { lazy } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { fetchContacts } from "../../redux/contacts/operations";
+import c from './ContactsPage.module.css'
 
 import ContactsForm from '../../components/ContactsForm/ContactsForm';
 import SearchBox from '../../components/SearchBox/SearchBox';
@@ -20,7 +21,7 @@ export default function ContactsPage() {
 
     return(
         <>
-            <h1>Phonebook</h1>
+            <h1 className={c.title}>Phonebook</h1>
             <ContactsForm />
             <SearchBox />
             {isLoading && !isError && <h3>Loading...</h3>}

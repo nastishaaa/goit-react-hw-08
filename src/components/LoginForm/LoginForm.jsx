@@ -68,7 +68,7 @@ export default function RegisterForm () {
             autoComplete='off'/>
             <ErrorMessage name='password' component='span'></ErrorMessage>
                         
-            <button type='submit'>Register</button>
+            <button type='submit'>Log in</button>
         </Form>
         </Formik>
     </>
