@@ -1,6 +1,5 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
-import { fetchContacts, addContact, deleteContact } from "../contacts/operations";
-import { selectFilter } from "../filters/slice";
+import { createSlice, createSelector, isAnyOf } from "@reduxjs/toolkit";
+import { fetchContacts, addContact, deleteContact, changeContact } from "../contacts/operations";
 import { logOut } from "../auth/operations";
 
 const handlePending = (state) => {
@@ -21,32 +20,41 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(fetchContacts.pending, handlePending)
         .addCase(fetchContacts.fulfilled, (state, action) => {
             state.isLoading = false;
             state.error = null;
             state.items = action.payload;
         })
-        .addCase(fetchContacts.rejected, handleRejected)
-        .addCase(addContact.pending, handlePending)
         .addCase(addContact.fulfilled, (state, action) => {
             state.isLoading = false;
             state.error = null;
             state.items.push(action.payload);
         })
-        .addCase(addContact.rejected, handleRejected)
-        .addCase(deleteContact.pending, handlePending)
         .addCase(deleteContact.fulfilled, (state, action) => {
             state.isLoading = false;
             state.error = null;
             state.items = state.items.filter(item => 
                 item.id !== action.payload.id)
         })
-        .addCase(deleteContact.rejected, handleRejected)
         .addCase(logOut.fulfilled, state => {
             state.items = [];
             state.error = null;
             state.isLoading = false;
+        })
+        .addCase(changeContact.fulfilled, (state, action) => {
+            state.error = null;
+            state.isLoading = false;
+            state.items = state.items.map(item =>
+                item.id === action.payload.id ? action.payload : item
+            );
+        })
+        .addMatcher(isAnyOf(fetchContacts.pending, addContact.pending, deleteContact.pending, changeContact.pending), 
+        (state, action) => {
+            handlePending;
+        })
+        .addMatcher(isAnyOf(fetchContacts.rejected, addContact.rejected, deleteContact.rejected, changeContact.rejected), 
+        (state, action) => {
+            handleRejected;
         })
     },
 });

@@ -1,8 +1,14 @@
-import c from './ModalDelete.module.css'
+import c from './Modal.module.css';
 
-export default function ModalDelete({ onConfirm, onCancel }) {
+export default function Modal({ onConfirm, onCancel, children }) {
+    const clickClose = (e) => {
+        if(e.target === e.currentTarget){
+            onCancel();
+        }
+    }
+    
     return (
-        <div className={c.modalOverlay}>
+        <div className={c.modalOverlay} onClick={clickClose}>
             <div className={c.modalContent}>
                 <h2 className={c.modalTitle}>Are you sure you want to delete?</h2>
                 <div className={c.modalButtons}>
